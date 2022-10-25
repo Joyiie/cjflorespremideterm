@@ -1,0 +1,73 @@
+﻿@page
+@model joy.premidterm.Pages.Manage.Patients.IndexModel
+
+<h1>PATIENT</h1>
+
+<div class="search">
+    <i class="bi bi-search"></i>
+    <input type="text" class="form-control" placeholder="Search" id="search">
+</div>
+
+
+@{
+    if (Model.View != null && Model.View.Patient != null && Model.View.Patient.Items != null && Model.View.Patient.Items.Count > 0)
+    {
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">FullName</th>
+                    <th scope="col">DateOfBirth</th>
+                    <th scope="col">Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var patient in Model?.View?.Patient.Items)
+                    {
+                        <tr>
+                            <td>@patient.Code</td>
+                            <th scope="row">@patient.FullName</th>
+                            <td>@patient.DateOfBirth</td>
+                            <td>@patient.Type</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                @{
+                    if (Model?.View?.Patient.PageIndex > 1)
+                    {
+                        <li class="page-item"><a class="page-link" href="/manage/patients?pageIndex=@(Model?.View?.Patient.PageIndex-1)&pageSize=@(Model?.View?.Patient.PageSize)&sortBy=@(Model?.View?.Patient.SortBy)&sortOrder=@(Model?.View?.Patient.SortOrder)">Previous</a></li>
+                    }
+
+                    <li class="page-item"><span class="page-link">page @Model?.View?.Patient.PageIndex of @Model?.View?.Patient.PageCount (@Model?.View?.Patient.TotalRows total rows)</span></li>
+
+
+                    if (Model?.View?.Patient.PageIndex < Model?.View?.Patient.PageCount)
+                    {
+                        <li class="page-item"><a class="page-link" href="/manage/patients?pageIndex=@(Model?.View?.Patient.PageIndex+1)&pageSize=@(Model?.View?.Patient.PageSize)&sortBy=@(Model?.View?.Patient.SortBy)&sortOrder=@(Model?.View?.Patient.SortOrder)">Next</a></li>
+                    }
+                }
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <div>There are no records to show.</div>
+    }
+}
+
+@section Scripts
+    {
+    <script>
+        $("#search").keyup(function (event) {
+            if (event.keyCode === 13) {
+                window.location = "/manage/patient?keyword=" + $("#search").val();
+            }
+        });
+    </script>
+}

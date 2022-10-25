@@ -1,0 +1,72 @@
+﻿@page
+@model joy.premidterm.Pages.Manage.Payments.IndexModel
+
+<h1>PAYMENT</h1>
+
+
+<div class="search">
+    <i class="bi bi-search"></i>
+    <input type="text" class="form-control" placeholder="Search" id="search">
+</div>
+
+
+@{
+    if (Model.View != null && Model.View.payment != null && Model.View.payment.Items != null && Model.View.payment.Items.Count > 0)
+    {
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Abbreviation</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var payment in Model?.View?.payment.Items)
+                    {
+                        <tr>
+                            <th scope="row">@payment.Title</th>
+                            <td>@payment.Description</td>
+                            <td>@payment.Abbreviation</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                @{
+                    if (Model?.View?.payment.PageIndex > 1)
+                    {
+                        <li class="page-item"><a class="page-link" href="/manage/payment?pageIndex=@(Model?.View?.payment.PageIndex-1)&pageSize=@(Model?.View?.payment.PageSize)&sortBy=@(Model?.View?.payment.SortBy)&sortOrder=@(Model?.View?.payment.SortOrder)">Previous</a></li>
+                    }
+
+                    <li class="page-item"><span class="page-link">page @Model?.View?.payment.PageIndex of @Model?.View?.payment.PageCount (@Model?.View?.payment.TotalRows total rows)</span></li>
+
+
+                    if (Model?.View?.payment.PageIndex < Model?.View?.payment.PageCount)
+                    {
+                        <li class="page-item"><a class="page-link" href="/manage/payment?pageIndex=@(Model?.View?.payment.PageIndex+1)&pageSize=@(Model?.View?.payment.PageSize)&sortBy=@(Model?.View?.payment.SortBy)&sortOrder=@(Model?.View?.payment.SortOrder)">Next</a></li>
+                    }
+                }
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <div>There are no records to show.</div>
+    }
+}
+
+@section Scripts
+    {
+    <script>
+        $("#search").keyup(function (event) {
+            if (event.keyCode === 13) {
+                window.location = "/manage/payment?keyword=" + $("#search").val();
+            }
+        });
+    </script>
+}
